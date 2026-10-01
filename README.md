@@ -1,7 +1,12 @@
 # [GROUP 20] COMP3322 - Web Development and Technologies.
 # FreshTrack
-*TODO* - Make introduction with usernames.
-cloudwe - Katarina Jane Jones
+## Group 20 Members
+| GitHub Username | Student Name |
+|------|----------------|
+| `cloudwe` | Katarina Jane Jones |
+| `tse-brian` | Tse Chun Hong |
+| `ericma0520` | Ma tsz Hin |
+| `MPhantommaker` | Chan Long Him |
 
 
 # Instructions - [ALPHA] Version
