@@ -8,6 +8,8 @@
 `docker compose up -d db`
 
 This starts a MySQL version 8.4 container on port 3306 and automatically runs db/schema.sql on first launch.
+<img width="1266" height="1096" alt="image" src="https://github.com/user-attachments/assets/fb90c5f1-ec4e-43a9-838a-e99755b8ba79" />
+
 
 ## 2. Starting the backend API
 Run `cd backend` to ensure you are in the backend directory.
