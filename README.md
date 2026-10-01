@@ -1,6 +1,8 @@
 # [GROUP 20] COMP3322 - Web Development and Technologies.
 # FreshTrack
 *TODO* - Make introduction with usernames.
+cloudwe - Katarina Jane Jones
+
 
 # Instructions - [ALPHA] Version
 ## 1. Starting the database
@@ -38,7 +40,3 @@ Currently, the below API endpoints are functional:
 # Database schema diagram
 <img width="1266" height="1096" alt="image" src="https://github.com/user-attachments/assets/fb90c5f1-ec4e-43a9-838a-e99755b8ba79" />
 
-
-
-## Note:
-The branch `
