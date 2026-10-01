@@ -1,0 +1,15 @@
+services:
+  db:
+    image: mysql:8.4 # long term support version is 8.4, database is also 8.4+
+    restart: unless-stopped # default is no but container might not restart automatically on crash/reboot
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD} # for security
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "3306:3306" # forwards my mac's port 3306 into the MySQL container's port 3306
+    volumes: # storage
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - db_data:/var/lib/mysql
+
+volumes: 
+  db_data:
