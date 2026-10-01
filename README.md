@@ -32,3 +32,6 @@ Currently, the below API endpoints are functional:
 2. `GET	/api/products`: Returns all active products
 3. `GET	/api/products/id`: Returns one product by ID
 
+# Backend Architecture Diagram
+<img width="475" height="640" alt="image" src="https://github.com/user-attachments/assets/8350b988-9b3e-4d1a-a948-2f1ae5da9dd1" />
+
