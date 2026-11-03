@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "./useAuth";
 import styles from "./Auth.module.css";
 
 // Shared login screen. Used by BOTH buyers and admins —

@@ -1,4 +1,4 @@
-import { useAuth } from "./AuthContext";
+import { useAuth } from "./useAuth";
 import Login from "./Login";
 
 // Wraps a page so it's only reachable with the right role.

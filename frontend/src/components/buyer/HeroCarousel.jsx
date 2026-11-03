@@ -6,7 +6,10 @@ import styles from "./Buyer.module.css";
 export default function HeroCarousel({ products, onAdd }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [added, setAdded] = useState(false);
+  // Tracks which slide was just added; "Added ✓" shows only while the
+  // carousel is still on that slide, so it reverts automatically when the
+  // slide changes (no setState-in-effect needed).
+  const [addedIndex, setAddedIndex] = useState(null);
 
   useEffect(() => {
     if (paused || products.length <= 1) return;
@@ -16,21 +19,17 @@ export default function HeroCarousel({ products, onAdd }) {
     return () => clearInterval(t);
   }, [paused, products.length]);
 
-  // Reset the "Added" confirmation whenever the slide changes.
-  useEffect(() => {
-    setAdded(false);
-  }, [index]);
-
   if (!products.length) return null;
   const item = products[index];
+  const added = addedIndex === index;
 
   const go = (step) =>
     setIndex((i) => (i + step + products.length) % products.length);
 
   function handleShop() {
     onAdd(item);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1500);
+    setAddedIndex(index);
+    setTimeout(() => setAddedIndex(null), 1500);
   }
 
   return (

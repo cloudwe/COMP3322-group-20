@@ -1,12 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { useState } from "react";
+import { AuthContext } from "./authContext";
 
-// ───────────────────────────────────────────────
-// SHARED AUTH (frontend infrastructure — both Tse
-// and Chan use this; neither "owns" it exclusively)
-// Holds the logged-in user + token + role, and
-// exposes login() / logout().
-// ───────────────────────────────────────────────
-const AuthContext = createContext(null);
 const STORAGE_KEY = "freshtrack_auth";
 
 function readStored() {
@@ -18,6 +12,12 @@ function readStored() {
   }
 }
 
+// ───────────────────────────────────────────────
+// SHARED AUTH (frontend infrastructure — both Tse
+// and Chan use this; neither "owns" it exclusively)
+// Holds the logged-in user + token + role, and
+// exposes login() / logout() (see useAuth.js).
+// ───────────────────────────────────────────────
 export function AuthProvider({ children }) {
   const [auth, setAuth] = useState(readStored()); // { token, user: { id, email, role } }
 
@@ -59,8 +59,4 @@ export function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  return useContext(AuthContext);
 }

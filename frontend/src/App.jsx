@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "./auth/AuthContext";
+import { useAuth } from "./auth/useAuth";
 import BuyerApp from "./components/buyer/BuyerApp";
 import AdminApp from "./components/admin/AdminApp";
 import RequireRole from "./auth/RequireRole";
