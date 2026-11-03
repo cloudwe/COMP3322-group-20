@@ -1,34 +1,69 @@
 import { useState } from "react";
-import ProductCatalog from "./ProductCatalog";
-import CartSidebar from "./CartSidebar";
-import "./store.css";
+import { useAuth } from "./auth/AuthContext";
+import BuyerApp from "./components/buyer/BuyerApp";
+import AdminApp from "./components/admin/AdminApp";
+import RequireRole from "./auth/RequireRole";
 
+// ───────────────────────────────────────────────
+// SHARED ROUTER — the ONLY file both of you edit.
+// Each person owns their own folder:
+//   src/components/buyer/   → Tse Chun Hong
+//   src/components/admin/   → Chan Long Him
+// Login + role-gating live in src/auth/ (shared).
+//
+// RULE: the storefront is PUBLIC (anyone can browse).
+// Only the Admin ERP area requires an ADMIN account.
+// ───────────────────────────────────────────────
 export default function App() {
-  // Hardcoded for the prototype
-  const [products] = useState([
-    { id: 1, name: "Premium Jasmine Rice (50kg)", price: 450, stock: 12 },
-    { id: 2, name: "Atlantic Salmon Fillets (Box)", price: 850, stock: 5 },
-    { id: 3, name: "Organic Soy Sauce (5L)", price: 120, stock: 30 }
-  ]);
-
-  const [cart, setCart] = useState([]);
-
-  function addToCart(product) {
-    // Week 3 principle: Never mutate state directly, spread into a new array
-    setCart([...cart, product]); 
-  }
+  const { isAuthed, user, logout } = useAuth();
+  const [view, setView] = useState("shop"); // "shop" | "admin"
 
   return (
     <>
-      <header className="store-header">
-        <h1>FreshTrack B2B Store</h1>
-        <nav>Items in Cart: {cart.length}</nav>
-      </header>
-      
-      <main className="store-layout">
-        <ProductCatalog products={products} onAdd={addToCart} />
-        <CartSidebar cart={cart} />
-      </main>
+      <nav className="app-nav">
+        <button
+          className={view === "shop" ? "app-nav-btn active" : "app-nav-btn"}
+          onClick={() => setView("shop")}
+        >
+          Buyer Store
+        </button>
+
+        {/* Admin ERP button is only shown to ADMIN accounts */}
+        {user?.role === "ADMIN" && (
+          <button
+            className={view === "admin" ? "app-nav-btn active" : "app-nav-btn"}
+            onClick={() => setView("admin")}
+          >
+            Admin ERP
+          </button>
+        )}
+
+        <span className="app-nav-user">
+          {isAuthed ? `${user?.email} · ${user?.role}` : "Guest"}
+        </span>
+
+        {/* Logged-in users get "Log out"; guests get "Staff Login"
+            (which routes them to the admin area and prompts for login). */}
+        {isAuthed ? (
+          <button className="app-nav-btn" onClick={logout}>
+            Log out
+          </button>
+        ) : (
+          <button className="app-nav-btn" onClick={() => setView("admin")}>
+            Staff Login
+          </button>
+        )}
+      </nav>
+
+      {view === "shop" ? (
+        // Public storefront — no login required to browse.
+        <BuyerApp />
+      ) : (
+        // Admin ERP — only reachable with an ADMIN account.
+        <RequireRole role="ADMIN">
+          <AdminApp />
+        </RequireRole>
+      )}
     </>
   );
 }

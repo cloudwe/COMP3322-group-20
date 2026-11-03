@@ -1,0 +1,27 @@
+/* CHAN LONG HIM — Admin Dashboard styles.
+   CSS Modules auto-scope these class names, so they
+   will NEVER collide with Tse's buyer styles. */
+
+.adminShell {
+  min-height: 100vh;
+}
+
+.adminHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background-color: #1f2937;
+  color: white;
+}
+
+.adminMain {
+  padding: 24px;
+}
+
+.placeholder {
+  padding: 24px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  color: #64748b;
+}

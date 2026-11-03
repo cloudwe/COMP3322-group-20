@@ -1,0 +1,350 @@
+/* TSE CHUN HONG — Buyer Storefront styles.
+   CSS Modules auto-scope these class names, so they
+   will NEVER collide with Chan's admin styles. */
+
+.page {
+  min-height: 100vh;
+  background: #f6f8f6;
+}
+
+/* ── Header / brand ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: #ffffff;
+  border-bottom: 1px solid #e6e9e6;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #e8f7ee;
+}
+.brandName {
+  font-size: 22px;
+  font-weight: 700;
+  color: #15803d;
+  letter-spacing: -0.5px;
+}
+.brandTag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #16a34a;
+  background: #dcfce7;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+.headerCart {
+  font-size: 15px;
+  color: #374151;
+}
+
+/* ── Hero carousel ── */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 20px 28px;
+  padding: 32px 40px;
+  border-radius: 18px;
+  background: linear-gradient(120deg, #16a34a 0%, #22c55e 55%, #4ade80 100%);
+  color: #fff;
+  overflow: hidden;
+  min-height: 180px;
+}
+.heroContent {
+  position: relative;
+  z-index: 2;
+  max-width: 60%;
+}
+.heroBadge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+.heroName {
+  margin: 0 0 8px;
+  font-size: 30px;
+  font-weight: 700;
+}
+.heroPrice {
+  margin: 0 0 18px;
+  font-size: 24px;
+  font-weight: 600;
+}
+.heroBtn {
+  border: none;
+  background: #fff;
+  color: #15803d;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+}
+.heroEmoji {
+  position: relative;
+  z-index: 2;
+  font-size: 90px;
+  line-height: 1;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.15));
+}
+.heroArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: #15803d;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 3;
+}
+.heroArrow.left {
+  left: 12px;
+}
+.heroArrow.right {
+  right: 12px;
+}
+.dots {
+  position: absolute;
+  bottom: 14px;
+  left: 40px;
+  display: flex;
+  gap: 8px;
+  z-index: 3;
+}
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 0;
+}
+.dotActive {
+  background: #fff;
+  width: 22px;
+  border-radius: 5px;
+}
+
+/* ── Controls: search + category chips ── */
+.controls {
+  margin: 0 28px 16px;
+}
+.search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  border: 1px solid #d8ddd8;
+  border-radius: 12px;
+  font-size: 15px;
+  background: #fff;
+  outline: none;
+}
+.search:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.chip {
+  border: 1px solid #d8ddd8;
+  background: #fff;
+  color: #4b5563;
+  padding: 7px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.chipActive {
+  border-color: #16a34a;
+  background: #16a34a;
+  color: #fff;
+}
+
+/* ── Layout ── */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  padding: 0 28px 40px;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Product grid ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+.empty {
+  color: #6b7280;
+  padding: 40px 0;
+}
+.card {
+  position: relative;
+  background: #fff;
+  border: 1px solid #ecefee;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+.cardMedia {
+  font-size: 56px;
+  text-align: center;
+  padding: 12px 0;
+  background: #f3f8f4;
+  border-radius: 10px;
+}
+.hotTag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+.cardName {
+  margin: 4px 0 0;
+  font-size: 15px;
+  color: #1f2937;
+}
+.cardCat {
+  margin: 0;
+  font-size: 12px;
+  color: #9ca3af;
+}
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 4px;
+}
+.cardPrice {
+  font-size: 18px;
+  font-weight: 700;
+  color: #15803d;
+}
+.cardStock {
+  font-size: 12px;
+  color: #6b7280;
+}
+.addBtn {
+  margin-top: 8px;
+  border: none;
+  background: #16a34a;
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+.addBtn:hover:not(:disabled) {
+  background: #15803d;
+}
+.addBtn:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+}
+
+/* ── Cart ── */
+.cartSidebar {
+  background: #fff;
+  border: 1px solid #ecefee;
+  border-radius: 14px;
+  padding: 18px;
+  position: sticky;
+  top: 84px;
+}
+.cartTitle {
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+.cartEmpty {
+  color: #9ca3af;
+  font-size: 14px;
+}
+.cartList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cartItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #374151;
+  border-bottom: 1px dashed #eef1ee;
+  padding-bottom: 6px;
+}
+.cartTotal {
+  display: flex;
+  justify-content: space-between;
+  margin: 14px 0;
+  font-size: 16px;
+}
+.checkoutBtn {
+  width: 100%;
+  border: none;
+  background: #15803d;
+  color: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
+.checkoutBtn:hover:not(:disabled) {
+  background: #166534;
+}
+.checkoutBtn:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+}
