@@ -44,4 +44,3 @@ Currently, the below API endpoints are functional:
 
 # Database schema diagram
 <img width="1266" height="1096" alt="image" src="https://github.com/user-attachments/assets/fb90c5f1-ec4e-43a9-838a-e99755b8ba79" />
-
