@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCatalog from "./ProductCatalog";
 import CartSidebar from "./CartSidebar";
 import HeroCarousel from "./HeroCarousel";
 import styles from "./Buyer.module.css";
 
 // ── TSE CHUN HONG: Buyer Storefront entry point ──
-// Prototype product data. In production this comes from
-// GET /api/products; the `category` + `hot` fields drive
-// the filters and the hero banner.
-const PRODUCTS = [
+// Backend base URL. Katarina's API runs on 3000 by default
+// (server.js: process.env.PORT || 3000). Change here if she moves it.
+const API_BASE = "http://localhost:3000";
+
+// Hardcoded fallback used when the backend / DB isn't running yet,
+// so the UI never breaks during development.
+const FALLBACK_PRODUCTS = [
   { id: 1, name: "Premium Jasmine Rice (50kg)", price: 450, stock: 12, category: "Grains", emoji: "🌾", hot: true },
   { id: 2, name: "Atlantic Salmon Fillets (Box)", price: 850, stock: 5, category: "Fish", emoji: "🐟", hot: true },
   { id: 3, name: "Organic Soy Sauce (5L)", price: 120, stock: 30, category: "Sauces", emoji: "🥢", hot: false },
@@ -19,20 +22,65 @@ const PRODUCTS = [
   { id: 8, name: "Organic Carrots (10kg)", price: 60, stock: 25, category: "Vegetables", emoji: "🥕", hot: false },
 ];
 
+// Map the backend's product shape -> the shape this UI expects.
+// Backend sends: name, wholesale_price, available_quantity, category_name,
+// image_url, ... (see product.repository.js). It has NO `hot` flag yet.
+function normalize(p) {
+  return {
+    id: p.id,
+    name: p.name,
+    price: p.wholesale_price,
+    stock: p.available_quantity,
+    category: p.category_name,
+    emoji: "📦",            // placeholder until real images (image_url) are wired in
+    hot: Boolean(p.is_hot), // TODO: ask Katarina to add an `is_hot` column to products
+  };
+}
+
 export default function BuyerApp() {
+  const [products, setProducts] = useState(FALLBACK_PRODUCTS);
   const [cart, setCart] = useState([]);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
 
-  const categories = ["All", ...Array.from(new Set(PRODUCTS.map((p) => p.category)))];
+  // Fetch real products from the backend. If the request fails (DB not up,
+  // server off, etc.) we silently keep the FALLBACK_PRODUCTS above.
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${API_BASE}/api/products`)
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then((rows) => {
+        if (cancelled) return;
+        if (Array.isArray(rows) && rows.length) {
+          setProducts(rows.map(normalize));
+        }
+      })
+      .catch(() => {
+        /* keep fallback data — backend not reachable yet */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  const filtered = PRODUCTS.filter(
+  const categories = [
+    "All",
+    ...Array.from(new Set(products.map((p) => p.category).filter(Boolean))),
+  ];
+
+  const filtered = products.filter(
     (p) =>
       (category === "All" || p.category === category) &&
       p.name.toLowerCase().includes(query.toLowerCase())
   );
 
-  const hotProducts = PRODUCTS.filter((p) => p.hot);
+  const hotProducts = products.filter((p) => p.hot);
+  // If the DB has no `hot` items yet, feature the first few so the hero
+  // banner still shows something (remove once is_hot is added).
+  const heroItems = hotProducts.length ? hotProducts : products.slice(0, 3);
 
   function addToCart(product) {
     setCart([...cart, product]);
@@ -62,7 +110,7 @@ export default function BuyerApp() {
         </div>
       </header>
 
-      <HeroCarousel products={hotProducts} onAdd={addToCart} />
+      <HeroCarousel products={heroItems} onAdd={addToCart} />
 
       <section className={styles.controls}>
         <input

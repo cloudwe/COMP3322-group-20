@@ -9,4 +9,4 @@ const ctrl = require("../controllers/product.controller"); // imports controller
 router.get("/", ctrl.list); // GET /api/products (returns all products)
 router.get("/:id", ctrl.get); // GET /api/products/:id (returns one product)
 
-module.exports = router; // exports so that app.js can use it.
+module.exports = router; // exports so that app.js can use it. 
