@@ -3,6 +3,7 @@
     Reads from the products table and the product_stock view.
     
     Author: Katarina Jane Jones
+    Bug fix and edited: Ma tsz Hin
 */
 const pool = require("../db"); // imports MySQL connection pool
 
@@ -52,6 +53,52 @@ module.exports =
     const [rows] = await pool.query(sql, [id]);
     return rows[0] || null;
   },
+
+  // adds a new product, returns the new product's id
+  // fields the admin left out get the same defaults as the database table
+  async create(p) {
+    const sql = `
+      INSERT INTO products
+        (category_id, sku, name, description, unit, wholesale_price,
+         minimum_order_quantity, reorder_level, image_url, is_perishable)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const [result] = await pool.query(sql, columnValues(p));
+    return result.insertId;
+  },
+
+  // replaces every editable field of one product
+  async update(id, p) {
+    const sql = `
+      UPDATE products
+      SET category_id = ?, sku = ?, name = ?, description = ?, unit = ?,
+          wholesale_price = ?, minimum_order_quantity = ?, reorder_level = ?,
+          image_url = ?, is_perishable = ?
+      WHERE id = ?
+    `;
+    await pool.query(sql, [...columnValues(p), id]);
+  },
+
+  // hides a product from the store without deleting it,
+  // old orders still point at the product so the row has to stay
+  async deactivate(id) {
+    await pool.query("UPDATE products SET is_active = FALSE WHERE id = ?", [id]);
+  },
 };
 
-// TODO - add more SQL queries e.g., update()
+// turns the request body into the list of values for create() and update()
+// (the order has to match the columns in the SQL above)
+function columnValues(p) {
+  return [
+    p.category_id ?? null,
+    p.sku.trim(),
+    p.name.trim(),
+    p.description ?? null,
+    p.unit.trim(),
+    p.wholesale_price,
+    p.minimum_order_quantity ?? 1,
+    p.reorder_level ?? 0,
+    p.image_url ?? null,
+    p.is_perishable ?? true,
+  ];
+}
