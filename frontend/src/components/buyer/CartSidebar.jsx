@@ -4,6 +4,8 @@ import styles from "./Buyer.module.css";
 // Buyer cart sidebar. Renders the SERVER-backed cart (loaded from
 // /api/cart) and places a real order via POST /api/orders.
 export default function CartSidebar({
+  dockOpen,
+  userOpen,
   items,
   subtotal,
   isBuyer,
@@ -19,9 +21,20 @@ export default function CartSidebar({
 }) {
   const [address, setAddress] = useState("");
 
+  // When the fixed auth dock (top-right) is expanded it would cover the top of
+  // this cart column. Push the cart below it so they never overlap.
+  // - Login panel open  -> tall, push far down.
+  // - User card open    -> short, push down a little.
+  // - Nothing expanded  -> just clear the small dock pill.
+  const dockStyle = dockOpen
+    ? { marginTop: 320, top: 420 }
+    : userOpen
+    ? { marginTop: 170, top: 240 }
+    : { top: 130 };
+
   if (orderDone) {
     return (
-      <aside className={styles.cartSidebar}>
+      <aside className={styles.cartSidebar} style={dockStyle}>
         <h2 className={styles.cartTitle}>Order placed</h2>
         <p className={styles.orderDone}>
           Thanks! Your order has been sent to the supplier.
@@ -36,7 +49,7 @@ export default function CartSidebar({
   // The cart and orders require a BUYER token.
   if (!isBuyer) {
     return (
-      <aside className={styles.cartSidebar}>
+      <aside className={styles.cartSidebar} style={dockStyle}>
         <h2 className={styles.cartTitle}>Your Order</h2>
         <p className={styles.cartEmpty}>
           {isAuthed
@@ -59,7 +72,7 @@ export default function CartSidebar({
   }
 
   return (
-    <aside className={styles.cartSidebar}>
+    <aside className={styles.cartSidebar} style={dockStyle}>
       <h2 className={styles.cartTitle}>Your Order</h2>
       {items.length === 0 ? (
         <p className={styles.cartEmpty}>Your cart is empty.</p>

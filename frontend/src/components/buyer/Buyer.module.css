@@ -378,18 +378,85 @@
   color: #374151;
 }
 
-/* ── Sign-in / register panel ── */
-.authWrap {
-  padding: 0 28px;
+/* ── Fixed, collapsible auth dock (top-right, stays on scroll) ── */
+.authDock {
+  position: fixed;
+  top: 72px;
+  right: 16px;
+  z-index: 50;
+  width: 320px;
+  max-width: calc(100vw - 32px);
 }
-.authPanel {
-  max-width: 380px;
-  margin: 16px auto;
+.authDockBox {
   background: #fff;
   border: 1px solid #e6e9e6;
   border-radius: 14px;
-  padding: 18px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+.authDockBar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px;
+  border: none;
+  background: #16a34a;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.authDockBar:hover {
+  background: #15803d;
+}
+.authDockCaret {
+  font-size: 12px;
+}
+.authDockBarLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.authUserCard {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.authUserEmail {
+  font-size: 14px;
+  color: #1f2937;
+  font-weight: 600;
+  word-break: break-all;
+}
+.authUserRole {
+  font-size: 11px;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* The panel now lives inside the dock, so drop the outer card chrome */
+.authPanel {
+  max-width: none;
+  margin: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 16px;
+  box-shadow: none;
+}
+
+@media (max-width: 860px) {
+  .authDock {
+    left: 12px;
+    right: 12px;
+    top: 64px;
+    width: auto;
+  }
 }
 .authTabs {
   display: flex;

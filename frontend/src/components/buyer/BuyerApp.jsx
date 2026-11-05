@@ -10,19 +10,10 @@ import styles from "./Buyer.module.css";
 // ── TSE CHUN HONG: Buyer Storefront entry point ──
 // All backend URLs are centralized in ../api (API_BASE).
 
-// Hardcoded fallback used only when the backend isn't reachable yet,
-// so the UI never looks completely empty during development. Real data
-// replaces it as soon as a user is logged in and the API responds.
-const FALLBACK_PRODUCTS = [
-  { id: 1, name: "Premium Jasmine Rice (50kg)", price: 450, stock: 12, category: "Grains", emoji: "🌾", hot: true, moq: 1, unit: "bags" },
-  { id: 2, name: "Atlantic Salmon Fillets (Box)", price: 850, stock: 5, category: "Fish", emoji: "🐟", hot: true, moq: 1, unit: "box" },
-  { id: 3, name: "Organic Soy Sauce (5L)", price: 120, stock: 30, category: "Sauces", emoji: "🥢", hot: false, moq: 1, unit: "bottles" },
-  { id: 4, name: "Fresh Broccoli (10kg)", price: 90, stock: 20, category: "Vegetables", emoji: "🥦", hot: true, moq: 1, unit: "crates" },
-  { id: 5, name: "Free-range Eggs (30pk)", price: 75, stock: 40, category: "Dairy", emoji: "🥚", hot: false, moq: 1, unit: "trays" },
-  { id: 6, name: "Grass-fed Beef Cubes (5kg)", price: 480, stock: 8, category: "Meat", emoji: "🥩", hot: false, moq: 1, unit: "packs" },
-  { id: 7, name: "Whole Tilapia (Box)", price: 220, stock: 15, category: "Fish", emoji: "🐠", hot: false, moq: 1, unit: "box" },
-  { id: 8, name: "Organic Carrots (10kg)", price: 60, stock: 25, category: "Vegetables", emoji: "🥕", hot: false, moq: 1, unit: "crates" },
-];
+// (No hardcoded fallback — products are always loaded live from the database.
+// Logged-in buyers get the real catalogue (re-fetched after checkout so stock
+// updates); guests get an empty list because /api/products is still auth-gated
+// on the backend — left as-is per project decision.)
 
 // Map the backend's product shape -> the shape this UI expects.
 // Backend sends (see product.repository.js): name, wholesale_price,
@@ -45,11 +36,12 @@ export default function BuyerApp() {
   const { token, isAuthed, user, logout } = useAuth();
   const isBuyer = isAuthed && user?.role === "BUYER";
 
-  const [products, setProducts] = useState(FALLBACK_PRODUCTS);
+  const [products, setProducts] = useState([]); // real DB data only; empty until the API responds
   const [categories, setCategories] = useState(["All"]);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
-  const [showAuth, setShowAuth] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false); // login dock starts collapsed; click to expand
+  const [userOpen, setUserOpen] = useState(true); // logged-in user card starts expanded; click bar to minimize
 
   // Server-backed cart
   const [cartItems, setCartItems] = useState([]);
@@ -57,29 +49,26 @@ export default function BuyerApp() {
   const [orderDone, setOrderDone] = useState(false);
   const [cartError, setCartError] = useState("");
 
-  // Load products + categories from the backend once a user is logged in.
-  // (Both endpoints require auth, so guests keep the fallback data.)
+  // Load the real catalogue from the backend on mount and whenever the token
+  // changes. Guests (no token) just get an empty list here; once the backend's
+  // listing endpoints are made public they'll see the live products too.
+  // No hardcoded fallback — products are always real DB data (or empty).
   useEffect(() => {
-    if (!token) return;
     let cancelled = false;
-    apiFetch("/api/products", { token })
+    apiFetch("/api/products", token ? { token } : {})
       .then((rows) => {
-        if (!cancelled && Array.isArray(rows) && rows.length) {
-          setProducts(rows.map(normalize));
-        }
+        if (!cancelled && Array.isArray(rows)) setProducts(rows.map(normalize));
       })
       .catch(() => {
-        /* keep fallback data — backend not reachable */
+        /* keep whatever we already have (e.g. empty list) */
       });
-    apiFetch("/api/categories", { token })
+    apiFetch("/api/categories", token ? { token } : {})
       .then((rows) => {
         if (!cancelled && Array.isArray(rows) && rows.length) {
           setCategories(["All", ...rows.map((c) => c.name)]);
         }
       })
-      .catch(() => {
-        /* keep fallback-derived categories */
-      });
+      .catch(() => {});
     return () => {
       cancelled = true;
     };
@@ -111,10 +100,21 @@ export default function BuyerApp() {
     setCartSubtotal(data.subtotal || 0);
   }
 
+  // Re-fetch the product list so the displayed stock reflects any change
+  // (e.g. after an order deducts stock). The backend is the source of truth.
+  async function reloadProducts() {
+    try {
+      const rows = await apiFetch("/api/products", { token });
+      if (Array.isArray(rows) && rows.length) setProducts(rows.map(normalize));
+    } catch {
+      /* keep the current product data if the refresh fails */
+    }
+  }
+
   async function addToCart(product) {
     // Not a buyer? Open the sign-in panel instead of silently doing nothing.
     if (!isBuyer) {
-      setShowAuth(true);
+      setAuthOpen(true);
       return;
     }
     try {
@@ -167,6 +167,7 @@ export default function BuyerApp() {
       });
       setOrderDone(true);
       await reloadCart();
+      await reloadProducts(); // refresh stock so the quantity drops after purchase
     } catch (err) {
       setCartError(err.message || "Could not place order");
     }
@@ -211,33 +212,54 @@ export default function BuyerApp() {
           <div className={styles.headerCart}>
             🛒 <strong>{cartCount}</strong> in cart
           </div>
-          <div className={styles.headerActions}>
-            {isAuthed ? (
-              <>
-                <span className={styles.headerUser}>
-                  {user?.email} · {user?.role}
-                </span>
-                <button className={styles.headerBtn} onClick={logout}>
-                  Log out
-                </button>
-              </>
-            ) : (
-              <button
-                className={styles.headerBtn}
-                onClick={() => setShowAuth((s) => !s)}
-              >
-                Sign in
-              </button>
-            )}
-          </div>
         </div>
       </header>
 
-      {showAuth && !isAuthed && (
-        <div className={styles.authWrap}>
-          <AuthPanel onClose={() => setShowAuth(false)} />
-        </div>
-      )}
+      {/* Fixed, always-visible auth dock (top-right). Stays on scroll,
+          collapses/expands via the title bar. */}
+      <div className={styles.authDock}>
+        {isAuthed ? (
+          <div className={styles.authDockBox}>
+            <button
+              type="button"
+              className={styles.authDockBar}
+              onClick={() => setUserOpen((o) => !o)}
+              aria-expanded={userOpen}
+            >
+              <span className={styles.authDockBarLabel}>👤 {user?.email}</span>
+              <span className={styles.authDockCaret}>
+                {userOpen ? "▾" : "▸"}
+              </span>
+            </button>
+            {userOpen && (
+              <div className={styles.authUserCard}>
+                <span className={styles.authUserEmail}>{user?.email}</span>
+                <span className={styles.authUserRole}>{user?.role}</span>
+                <button className={styles.headerBtn} onClick={logout}>
+                  Log out
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className={styles.authDockBox}>
+            <button
+              type="button"
+              className={styles.authDockBar}
+              onClick={() => setAuthOpen((o) => !o)}
+              aria-expanded={authOpen}
+            >
+              <span className={styles.authDockBarLabel}>
+                👤 Sign in / Register
+              </span>
+              <span className={styles.authDockCaret}>
+                {authOpen ? "▾" : "▸"}
+              </span>
+            </button>
+            {authOpen && <AuthPanel onClose={() => setAuthOpen(false)} />}
+          </div>
+        )}
+      </div>
 
       <HeroCarousel products={heroItems} onAdd={addToCart} />
 
@@ -265,6 +287,8 @@ export default function BuyerApp() {
       <main className={styles.layout}>
         <ProductCatalog products={filtered} onAdd={addToCart} />
         <CartSidebar
+          dockOpen={authOpen}
+          userOpen={userOpen}
           items={cartItems}
           subtotal={cartSubtotal}
           isBuyer={isBuyer}
@@ -272,7 +296,7 @@ export default function BuyerApp() {
           onIncrement={increment}
           onRemove={removeFromCart}
           onCheckout={checkout}
-          onSignIn={() => setShowAuth(true)}
+          onSignIn={() => setAuthOpen(true)}
           onClearError={() => setCartError("")}
           error={cartError}
           orderDone={orderDone}

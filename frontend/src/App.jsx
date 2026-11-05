@@ -42,15 +42,18 @@ export default function App() {
           {isAuthed ? `${user?.email} · ${user?.role}` : "Guest"}
         </span>
 
-        {/* Logged-in users get "Log out"; guests get "Staff Login"
-            (which routes them to the admin area and prompts for login). */}
-        {isAuthed ? (
-          <button className="app-nav-btn" onClick={logout}>
+        {/* Single login lives in the fixed storefront dock (top-right).
+            After signing in, admins see the "Admin ERP" button (above) and
+            everyone sees "Log out"; guests just use the dock to sign in. */}
+        {isAuthed && (
+          <button
+            className="app-nav-btn"
+            onClick={() => {
+              logout();
+              setView("shop");
+            }}
+          >
             Log out
-          </button>
-        ) : (
-          <button className="app-nav-btn" onClick={() => setView("admin")}>
-            Staff Login
           </button>
         )}
       </nav>
