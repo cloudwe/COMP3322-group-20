@@ -10,8 +10,7 @@ export default function OrdersPanel() {
         </div>
       </div>
       <p className={styles.placeholder}>
-        Order data is not connected yet. The backend currently provides
-        <code> GET /api/products</code>, but does not have an orders API.
+        N/A yet.
       </p>
     </section>
   );
