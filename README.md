@@ -19,16 +19,16 @@ This starts a MySQL version 8.4 container on port 3306 and automatically runs db
 ## 2. Starting the backend API
 Run `cd backend` to ensure you are in the backend directory.
 
-Then enter `npm run dev` to run the server on http://localhost:4000.
+Then enter `npm run dev` to run the server on http://localhost:3000.
 
 ## 3. Testing the backend API
 Once you have executed steps 1 and 2, you can test the Alpha version of our backend by entering the below URLs into your browser:
 
-`http://localhost:4000/api/health` : should return `{"status":"ok"}` 
+`http://localhost:3000/api/health` : should return `{"status":"ok"}` 
 
-`http://localhost:4000/api/products` : list of products from the database
+`http://localhost:3000/api/products` : list of products from the database
 
-`http://localhost:4000/api/products/1` : one product or a 404 not found error (including if there are no product entries).
+`http://localhost:3000/api/products/1` : one product or a 404 not found error (including if there are no product entries).
 
 Anything else should return a 404 not found error.
 

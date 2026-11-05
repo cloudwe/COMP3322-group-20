@@ -5,7 +5,7 @@
 # Starts the full local stack:
 #   1. MySQL 8.4  (Docker container, port 3306)
 #   2. Seed data  (admin + buyer accounts, categories, products)
-#   3. Backend    (Express, http://localhost:4000)
+#   3. Backend    (Express, http://localhost:3000)
 #   4. Frontend   (Vite,    http://localhost:5173)
 #
 # Prerequisites (run ONCE on your machine):
@@ -77,7 +77,7 @@ echo "==> Seeding database (idempotent)..."
 
 # --- 3. Start backend + frontend -------------------------------------------
 mkdir -p logs
-echo "==> Starting backend  -> http://localhost:4000  (logs/backend.log)"
+echo "==> Starting backend  -> http://localhost:3000  (logs/backend.log)"
 ( cd backend  && npm run dev ) > logs/backend.log  2>&1 &
 BACK_PID=$!
 
@@ -95,7 +95,7 @@ trap cleanup EXIT INT TERM
 echo ""
 echo "=============================================================="
 echo " FreshTrack dev stack is LIVE"
-echo "   Backend : http://localhost:4000   (api base)"
+echo "   Backend : http://localhost:3000   (api base)"
 echo "   Frontend: http://localhost:5173"
 echo ""
 echo " Demo accounts (created by seed):"

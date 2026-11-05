@@ -1,12 +1,12 @@
 // Shared API client for FreshTrack.
 //
 // All backend calls go through here so the base URL and the auth header
-// live in ONE place. The backend (Katarina/Eric) runs on :4000 in this setup
-// (backend/.env PORT=4000, falls back to 3000) and has CORS enabled, so an
+// live in ONE place. The backend (Katarina/Eric) runs on :3000 in this setup
+// (backend/.env PORT=3000) and has CORS enabled, so an
 // absolute URL from the Vite dev server (5173) is fine.
 //
 // Used by BOTH the buyer storefront and the shared auth layer.
-export const API_BASE = "http://localhost:4000";
+export const API_BASE = "http://localhost:3000";
 
 export function authHeaders(token) {
   const headers = { "Content-Type": "application/json" };
