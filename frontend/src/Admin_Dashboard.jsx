@@ -17,9 +17,15 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function loadDashboardData() {
       try {
+        const token = localStorage.getItem("token"); // get token
         const [orderResponse, productResponse] = await Promise.all([
-          fetch("http://localhost:3000/api/orders"),
-          getProducts()
+          // authorization header is necessary.
+          fetch("http://c3322-pg20.cs.hku.hk:3000/api/orders", {
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          }),
+          getProducts() 
         ]);
 
         const ordersData = await orderResponse.json();
@@ -31,7 +37,7 @@ export default function AdminDashboard() {
         setStats({
             totalOrders: ordersData.length,
             revenue: ordersData.reduce((sum, o) => sum + Number(o.total), 0),
-            pending: ordersData.filter(o => o.status === "Pending").length,
+            pending: ordersData.filter(o => o.status === "PROCESSING").length,
             lowStock: productsData.filter(p => p.stock < 5).length
         });
       } catch (error) {
