@@ -25,3 +25,299 @@
   border-radius: 8px;
   color: #64748b;
 }
+
+.dashboardIntro {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.dashboardIntro h2,
+.dashboardIntro p {
+  margin: 0;
+}
+
+.dashboardIntro h2 {
+  color: #111827;
+  font-size: 24px;
+}
+
+.dashboardIntro p,
+.panelSubtitle {
+  margin-top: 5px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.refreshButton,
+.errorBanner button {
+  border: 0;
+  border-radius: 7px;
+  padding: 9px 14px;
+  background: #166534;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.refreshButton:hover:not(:disabled),
+.errorBanner button:hover {
+  background: #14532d;
+}
+
+.refreshButton:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.refreshButton:focus-visible,
+.errorBanner button:focus-visible {
+  outline: 3px solid #86efac;
+  outline-offset: 2px;
+}
+
+.errorBanner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.errorBanner button {
+  flex: 0 0 auto;
+  background: #991b1b;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.summaryCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.summaryLabel,
+.summaryDetail {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.summaryValue {
+  color: #111827;
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.panel {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 4%);
+}
+
+.panelHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.panelTitle {
+  margin: 0;
+  color: #111827;
+  font-size: 18px;
+}
+
+.panelSubtitle {
+  margin-bottom: 0;
+}
+
+.panelCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  min-height: 30px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.dataTable th,
+.dataTable td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.dataTable thead th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.dataTable tbody th {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.dataTable tbody td {
+  color: #475569;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.statusGood {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.statusWarning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.statusDanger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.emptyState {
+  margin: 0;
+  padding: 20px 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.panelGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.placeholder code {
+  font-size: 0.9em;
+}
+
+.expiryList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.expiryItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.expiryItem > div,
+.expiryDate {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.expiryItem strong {
+  color: #1f2937;
+  font-size: 14px;
+}
+
+.expiryItem span,
+.expiryDate span,
+.panelNote {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.expiryDate {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.expiryDate strong {
+  color: #b45309;
+}
+
+.panelNote {
+  margin: 14px 0 0;
+}
+
+@media (max-width: 760px) {
+  .summaryGrid,
+  .panelGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .adminMain {
+    padding: 16px;
+  }
+
+  .adminHeader {
+    padding: 14px 16px;
+  }
+
+  .adminHeader h1 {
+    font-size: 20px;
+  }
+
+  .dashboardIntro,
+  .errorBanner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
