@@ -6,7 +6,7 @@
 // absolute URL from the Vite dev server (5173) is fine.
 //
 // Used by BOTH the buyer storefront and the shared auth layer.
-export const API_BASE = "http://c3322-pg20.cs.hku.hk:3000";
+export const API_BASE = "";
 
 export function authHeaders(token) {
   const headers = { "Content-Type": "application/json" };

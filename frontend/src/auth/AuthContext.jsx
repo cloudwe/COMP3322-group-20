@@ -31,12 +31,14 @@ export function AuthProvider({ children }) {
       body: { email, password },
     });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    localStorage.setItem("token", data.token);
     setAuth(data);
     return data;
   }
 
   function logout() {
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem("token");
     setAuth(null);
   }
 

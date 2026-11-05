@@ -20,7 +20,7 @@ export default function AdminDashboard() {
         const token = localStorage.getItem("token"); // get token
         const [orderResponse, productResponse] = await Promise.all([
           // authorization header is necessary.
-          fetch("http://c3322-pg20.cs.hku.hk:3000/api/orders", {
+          fetch("/api/orders", {
             headers: {
               "Authorization": `Bearer ${token}`
             }
