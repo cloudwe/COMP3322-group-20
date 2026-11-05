@@ -1,15 +1,48 @@
+
 services:
   db:
-    image: mysql:8.4 # long term support version is 8.4, database is also 8.4+
-    restart: unless-stopped # default is no but container might not restart automatically on crash/reboot
+    image: mysql:8.4
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD} # for security
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
-    ports:
-      - "3306:3306" # forwards my mac's port 3306 into the MySQL container's port 3306
-    volumes: # storage
+    volumes:
       - ./db/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       - db_data:/var/lib/mysql
+    networks:
+      - freshtrack-net
 
-volumes: 
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000" # exposes api so vm can reach it
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+      - PORT=3000
+    depends_on:
+      - db
+    networks:
+      - freshtrack-net
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - "80:80" # exposes the website to the public internet
+    depends_on:
+      - backend
+    networks:
+      - freshtrack-net
+
+volumes:
   db_data:
+
+networks:
+  freshtrack-net:
+    driver: bridge
