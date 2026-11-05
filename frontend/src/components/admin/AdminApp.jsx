@@ -33,7 +33,12 @@ export default function AdminApp() {
       setError("");
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/products`);
+        const token = localStorage.getItem("token"); // get the token
+        const response = await fetch(`${API_BASE_URL}/api/products`, {
+          headers: {
+            "Authorization": `Bearer ${token}` // needs header.
+          }
+        });
         if (!response.ok) {
           throw new Error(`Products API returned HTTP ${response.status}.`);
         }
