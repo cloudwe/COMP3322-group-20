@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AuthContext } from "./authContext";
+import { apiFetch } from "../api";
 
 const STORAGE_KEY = "freshtrack_auth";
 
@@ -13,37 +14,22 @@ function readStored() {
 }
 
 // ───────────────────────────────────────────────
-// SHARED AUTH (frontend infrastructure — both Tse
-// and Chan use this; neither "owns" it exclusively)
-// Holds the logged-in user + token + role, and
-// exposes login() / logout() (see useAuth.js).
+// SHARED AUTH (frontend infrastructure — both zones use this).
+// Holds the logged-in user + token + role, and exposes
+// login() / logout() (see useAuth.js).
+//
+// The backend is live, so this now talks to the REAL
+// POST /api/auth/login endpoint and stores the JWT it returns.
 // ───────────────────────────────────────────────
 export function AuthProvider({ children }) {
   const [auth, setAuth] = useState(readStored()); // { token, user: { id, email, role } }
 
   async function login(email, password) {
-    // ── DEV FALLBACK ──
-    // Lets you test the admin gate BEFORE Katarina's real
-    // login endpoint exists. Rule: emails containing "admin"
-    // are treated as ADMIN, everything else as BUYER.
-    // DELETE this block once POST /api/auth/login is live.
-    if (import.meta.env.DEV) {
-      const role = email.toLowerCase().includes("admin") ? "ADMIN" : "BUYER";
-      const fake = { token: "dev-token", user: { id: 0, email, role } };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(fake));
-      setAuth(fake);
-      return fake;
-    }
-
-    // ── REAL LOGIN (contract to agree with backend) ──
-    // Expects backend to return: { token, user: { id, email, role } }
-    const res = await fetch("/api/auth/login", {
+    // Real login — backend returns { token, user }.
+    const data = await apiFetch("/api/auth/login", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: { email, password },
     });
-    if (!res.ok) throw new Error("Login failed");
-    const data = await res.json();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     setAuth(data);
     return data;
@@ -54,8 +40,10 @@ export function AuthProvider({ children }) {
     setAuth(null);
   }
 
+  const token = auth?.token ?? null;
+
   return (
-    <AuthContext.Provider value={{ ...auth, login, logout, isAuthed: !!auth }}>
+    <AuthContext.Provider value={{ ...auth, token, login, logout, isAuthed: !!auth }}>
       {children}
     </AuthContext.Provider>
   );

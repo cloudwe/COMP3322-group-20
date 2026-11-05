@@ -348,3 +348,187 @@
   background: #d1d5db;
   cursor: not-allowed;
 }
+
+/* ── Header right cluster: cart count + auth ── */
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.headerBtn {
+  border: 1px solid #d8ddd8;
+  background: #fff;
+  color: #374151;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.headerBtn:hover {
+  border-color: #22c55e;
+  color: #15803d;
+}
+.headerUser {
+  font-size: 14px;
+  color: #374151;
+}
+
+/* ── Sign-in / register panel ── */
+.authWrap {
+  padding: 0 28px;
+}
+.authPanel {
+  max-width: 380px;
+  margin: 16px auto;
+  background: #fff;
+  border: 1px solid #e6e9e6;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+.authTabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.authTab {
+  flex: 1;
+  border: 1px solid #d8ddd8;
+  background: #fff;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #4b5563;
+}
+.authTabActive {
+  border-color: #16a34a;
+  background: #16a34a;
+  color: #fff;
+}
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.authForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #374151;
+}
+.authForm input {
+  padding: 10px 12px;
+  border: 1px solid #d8ddd8;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+}
+.authForm input:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+}
+.authSubmit {
+  border: none;
+  background: #16a34a;
+  color: #fff;
+  padding: 11px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
+.authSubmit:hover {
+  background: #15803d;
+}
+.authError {
+  color: #ef4444;
+  font-size: 13px;
+  margin: 0;
+}
+.authInfo {
+  color: #16a34a;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* ── Cart item rows (server-backed) ── */
+.cartItemInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.cartItemName {
+  font-size: 14px;
+  color: #1f2937;
+}
+.cartItemUnit {
+  font-size: 11px;
+  color: #9ca3af;
+}
+.cartQty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.qtyBtn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid #d8ddd8;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  color: #374151;
+}
+.qtyBtn:hover {
+  border-color: #22c55e;
+  color: #15803d;
+}
+.qtyVal {
+  min-width: 18px;
+  text-align: center;
+  font-size: 14px;
+}
+.cartLineTotal {
+  font-size: 14px;
+  font-weight: 600;
+  color: #15803d;
+}
+
+/* ── Checkout: delivery address + confirmation ── */
+.addressLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #374151;
+  margin: 12px 0;
+}
+.addressInput {
+  padding: 10px 12px;
+  border: 1px solid #d8ddd8;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+}
+.addressInput:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+}
+.orderDone {
+  color: #16a34a;
+  font-size: 14px;
+}
+.cartError {
+  color: #ef4444;
+  font-size: 13px;
+  margin: 0 0 10px;
+}
