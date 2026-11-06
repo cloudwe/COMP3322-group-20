@@ -36,9 +36,9 @@ export default function AdminDashboard() {
 
         setStats({
             totalOrders: ordersData.length,
-            revenue: ordersData.reduce((sum, o) => sum + Number(o.total), 0),
+            revenue: ordersData.reduce((sum, o) => sum + Number(o.subtotal), 0),
             pending: ordersData.filter(o => o.status === "PROCESSING").length,
-            lowStock: productsData.filter(p => p.stock < 5).length
+            lowStock: productsData.filter(p => Number(p.available_quantity) < 5).length
         });
       } catch (error) {
         console.error("Error loading dashboard data:", error);
@@ -109,9 +109,9 @@ export default function AdminDashboard() {
                 {orders.slice(0, 5).map(order => (
                   <tr key={order.id}>
                     <td>#{order.id}</td>
-                    <td>{order.customer}</td>
+                    <td>{order.business_name || order.buyer_email || "Unknown"}</td>
                     <td>{order.status}</td>
-                    <td>${order.total}</td>
+                    <td>${order.subtotal}</td>
                   </tr>
                 ))}
               </tbody>
@@ -122,10 +122,10 @@ export default function AdminDashboard() {
             <h3>Inventory Alerts</h3>
             <ul>
               {products
-                .filter(p => p.stock < 10)
+                .filter(p => Number(p.available_quantity) < 10)
                 .map(product => (
                   <li key={product.id}>
-                    {product.name} - {product.stock} left
+                    {product.name} - {product.available_quantity} left
                   </li>
                 ))}
             </ul>
