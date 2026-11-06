@@ -16,7 +16,7 @@ import styles from "./Admin.module.css";
 // ───────────────────────────────────────────────
 
 const EXPIRY_ALERT_DAYS = 14;
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "http://localhost:3000")
+const API_BASE_URL = "";
   .replace(/\/$/, "");
 
 export default function AdminApp() {
