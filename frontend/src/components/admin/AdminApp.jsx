@@ -17,7 +17,6 @@ import styles from "./Admin.module.css";
 
 const EXPIRY_ALERT_DAYS = 14;
 const API_BASE_URL = "";
-  .replace(/\/$/, "");
 
 export default function AdminApp() {
   const [products, setProducts] = useState([]);
